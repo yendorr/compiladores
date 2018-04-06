@@ -1,3 +1,20 @@
-program HelloWorld123;begin
+2.3
+%1010 %1210
+$abaca7e
+$ab1ga1L
+
+
+654456;
+45r456
+2.3
+2-
+< >2<=45>=678<>56==56:= 3457
+program HelloWorld163;
+begin
   writeln('Hello, world.')
+$f12a
+{C:\Users\User\Downloads\ZeroBraneStudio\bin\lua\header\lua.lua}
 end.
+a3xbcd := (-x);
+for 1..9
+x: Integer

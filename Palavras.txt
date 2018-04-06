@@ -1,0 +1,16 @@
+and downto In packed to
+array else inline procedure type
+asm End interface program unit
+begin File Label record until
+case For div mod repeat const Foward nil set uses
+constructor Function not shl var
+destructor Goto object shr while
+div If of string with
+do implementation or then xor
+
+Byte Shortint Smallint Word
+Integer	smallint longint
+Cardinal Longint Longword Int64
+QWord Real Single Double Extende
+Comp Currency Boolean ByteBool
+WordBool LongBool
