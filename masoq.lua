@@ -61,8 +61,6 @@ function getTokens(line,linhas)
       elseif  isComercial(c) then
           i=i+1
           c = word:sub(i,i)
-          
-      
       elseif  isPorcento(c) then
           i=i+1
           c = word:sub(i,i)
@@ -115,6 +113,7 @@ function getTokens(line,linhas)
       elseif  isMenos(c) then
           --salva menos
           print("menos",token)
+          print(i,len,token,c)
       
       elseif  isAritmetico(c) then
           --salva operador
@@ -171,6 +170,9 @@ function getTokens(line,linhas)
                     --print("float",token)
                     --salva numero com numero decimal
                   end
+                else
+                  --salva 
+                  print("float",token)
                 end
             else
                 --salva erro no numero
