@@ -12,7 +12,6 @@ program HelloWorld163;
 begin
   writeln('Hello, world.')
 $f12a
-{C:\Users\User\Downloads\ZeroBraneStudio\bin\lua\header\lua.lua}
 end.
 a3xbcd := (-x);
 for 1..9

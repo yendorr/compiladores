@@ -78,6 +78,11 @@ function isPorcento(char)
     return asc == 37
 end
 
+function isAspa(char)
+    asc = string.byte(char) 
+    return asc == 39
+end
+
 function isAspas(char)
     asc = string.byte(char) 
     return asc == 34
@@ -88,19 +93,29 @@ function isAChave(char)
     return asc == 123
 end
 
+function isBChave(char)
+    asc = string.byte(char)
+    return asc == 125
+end
+
 function isAParente(char)
     asc = string.byte(char)
     return asc == 40
 end
 
-function isBparente(char)
+function isBParente(char)
     asc = string.byte(char)
     return asc == 41
 end
 
-function isBchave(char)
+function isAColchete(char)
     asc = string.byte(char)
-    return asc == 125
+    return asc == 91
+end
+
+function isBColchete(char)
+    asc = string.byte(char)
+    return asc == 93
 end
 
 function isComercial(char)
@@ -113,6 +128,10 @@ function isUnderLine(char)
     return asc == 95
 end
 
+function identificador(char)
+    return isAlpha(char) or isUnderLine(char) or isDec(char)
+end  
+
 function colado(char)
-  return isAritmetico(char) or isMenos(char) or isMenor(char) or isMaior(char) or isIgual(char) or isPV(char)       or isDP(char) or isVirgula(char)
+  return isAritmetico(char) or isMenos(char) or isMenor(char) or isMaior(char) or isIgual(char) or isPV(char)       or isDP(char) or isVirgula(char) or isAParente(char)
 end  

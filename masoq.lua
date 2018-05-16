@@ -26,7 +26,7 @@ function getTokens(line,linhas)
           elseif isIgual(c) and i<=len then
               token = token .. c
               --salva operador menor igual
-              print("igual", token)
+              print("Menor igual", token)
           else
               i=i-1
               c = word:sub(i,i)
@@ -96,7 +96,11 @@ function getTokens(line,linhas)
               --salva numero hexa
               print("Hexa",token)
           end
-      
+          
+      elseif isPV(c) then
+          --salva pronto e virgula
+          print("charles",token)
+          
       elseif  isDP(c) then
           i=i+1
           c = word:sub(i,i)
@@ -113,30 +117,68 @@ function getTokens(line,linhas)
       elseif  isMenos(c) then
           --salva menos
           print("menos",token)
-          print(i,len,token,c)
-      
+          
       elseif  isAritmetico(c) then
           --salva operador
           printf("operador",token)
           
       elseif isAlpha(c) then
-        --i=i+1
-        --c = word:sub(i,i)
-        --while( )do
-          
-        --end
-      
+          i=i+1
+          c = word:sub(i,i)
+          while(i<=len and identificador(c))do
+            token = token .. c
+            i=i+1
+            c = word:sub(i,i)
+          end
+          i=i-1
+          --verifica e salva palavra
+          print("palavra",token);
+      elseif isAspa(c) then
+          --salva aspa
+          print("aspa", token)
       elseif isAspas(c) then
-      
+          --salva aspas
+          print("aspas",token)
+          
       elseif isAChave(c) then
-      
+          --salva abrechave
+          print("Achave",token)
       elseif isAParente(c) then
-      
-      elseif isAChave(c) then
-      
+          --salva abreParenteses
+          print("Aparente",token)
+        
+      elseif isAColchete(c) then
+          --salva abreColchete
+          print("AColchete",token)
+          
+      elseif isBChave(c) then
+          --salva fechachave
+          print("Bchave",token)
+          
+      elseif isPonto(c) then
+          i=i+1
+          c = word:sub(i,i)
+          if(isPonto(c))then
+              -- opa dois pontos
+              print("aqueles dois pontos",token)
+          else
+              -- tem?
+              i=i-1
+              print("um ponto",token)
+          end
+          
+      elseif isBParente(c) then
+          --salva fechaParenteses
+          print("Bparente",token)
+          
+      elseif isBColchete(c) then
+          --salva fechaColchete
+          print("BColchete",token)
+          
       elseif isDec(c) then
           i=i+1
           c = word:sub(i,i)
+          local hmm = true
           while(i<=len and isDec(c)) do
               token = token .. c
               i=i+1
@@ -144,7 +186,7 @@ function getTokens(line,linhas)
           end
           if(i<=len and not isDec(c)) then
             if colado(c) then
-            -- salva numero
+            -- ou n salva numero
             print("numero1",token)
             i=i-1
             elseif (isPonto(c)) then
@@ -161,43 +203,49 @@ function getTokens(line,linhas)
                   -- salva numero
                   print("numero2",token)
                   i=i-1
+                  --elseif () 
                   else
+
                       --salva erro no numero
                     token = token .. c
-                    print("não possui apenas numeros1", token)
+                    hmm = false
+                    --print("não possui apenas numeros1", token)
                     i=len+1
                   --else
-                    --print("float",token)
+                    print("float1",token)
                     --salva numero com numero decimal
                   end
-                else
+                else --i>len
                   --salva 
-                  print("float",token)
+                  print("float2",token)
+                  hmm = false
                 end
             else
                 --salva erro no numero
                 token = token .. c
+                hmm = false
                 print("não possui apenas numeros2", token)
                 i=len+1
             end
+          end--s
+          if hmm then
+            --salva  numero normal
+            print("numero hmm",token)
           end
       end
       i=i+1
     end
-    
   end
 end
 
 file = 'pascal.txt'
 f = io.open(file, "rb")
   if f == nil then 
-    print("deu ruim") 
+    --print("deu ruim") 
   end
 
 for line in io.lines(file) do 
   linhas = linhas + 1; 
   getTokens(line,linhas)
   a[linhas] = {};
-
 end
-  
