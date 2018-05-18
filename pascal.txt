@@ -1,18 +1,1 @@
-%1010 %1210
-$abaca7e
-$ab1ga1L
-
-654456;
-5478
-45r456
-2.33
-2-1
-< >2<=45>=678<>56==56:= 3457
-program HelloWorld163;
-begin
-  writeln('Hello, world.')
-$f12a
-end.
-a3xbcd := (-x);
-for 1..9
-x: Integer
+28+2.2
