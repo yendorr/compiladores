@@ -288,13 +288,13 @@ function getTokens(line,linhas)
   end
 end
 
-file = 'pascal.txt'
-f = io.open(file, "rb")
+file = 'pascal.txt';
+f = io.open(file, "rb");
   if f == nil then 
     --print("deu ruim") 
   end
 
-for line in io.lines(file) do 
-  linhas = linhas + 1; 
+for line in io.lines(file) do
+  linhas = linhas + 1;
   getTokens(line,linhas)
 end
