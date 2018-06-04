@@ -20,9 +20,15 @@ function analisa(palavra)
 end
 
 function anda()
-    posW = posW+1
+    posW = posW + 1
     c = palavra:sub(posW,posW)
     colunaNoCodigo = colunaNoCodigo + 1
+end
+
+function volta()
+    posW = posW - 1
+    c = palavra:sub(posW,posW)
+    colunaNoCodigo = colunaNoCodigo - 1
 end
 
 function salvaToken(bufferDoToken, tipoDoToken)
@@ -43,8 +49,7 @@ function log()
     print(contadorTokens,token[contadorTokens].texto,"\n")
 end
 
-function estadoInicial()
-        
+function estadoInicial()    
     if isMaior(c) then
         estadoMaior()
     elseif isMenor(c) then
@@ -52,11 +57,11 @@ function estadoInicial()
     elseif isIgual(c) then
         estadoIgual()
     elseif isComercial(c) then
-        
+        estadoOcta()
     elseif isPorcento(c) then
-        
+        estadoBinario()
     elseif isSifrao(c) then
-        
+        --estadoHexa()
     elseif isPV(c) then
         estadoPV()
     elseif isDP(c) then
@@ -74,7 +79,7 @@ function estadoInicial()
     elseif isAChave(c) then
         estadoAChave()
     elseif isAParente(c) then
-        estadoAparente()
+        estadoAParente()
     elseif isAColchete(c) then
         estadoAColchete()
     elseif isBChave(c) then
@@ -84,9 +89,9 @@ function estadoInicial()
     elseif isBParente(c) then
         estadoBParente()
     elseif isBColchete(c) then
-        estadoBcolchete()
+        estadoBColchete()
     elseif isDec(c) then
-         
+        estadoNumero()
     end
 end
 
@@ -228,15 +233,115 @@ function estadoBChave()
 end
 
 function estadoPonto()
-    
+    buffer = c
+    anda()
+    if(isPonto(c)) then
+        buffer = buffer .. c
+        salvaToken(buffer,"ponto ponto")
+        anda()
+        log()
+    end
 end
         
 function estadoBParente()
-    
+    buffer = c
+    anda()
+    salvaToken(buffer,"fecha parente")
+    log()
+end
+
+function estadoBinario()
+    buffer = c
+    anda()
+    while isOcta(c) do
+        buffer = buffer .. c
+        anda()
+    end
+    if(c) then
+        salvaToken(buffer, "numero octal")
+    else
+        salvaToken(buffer,"numero octal com erro")
+    end
+    anda()
+    log()
+end
+
+function estadoOcta() 
+    buffer = c
+    anda()
+    while isOcta(c) do
+        buffer = buffer .. c
+        anda()
+    end
+    if(c) then
+        salvaToken(buffer, "numero binario")
+        anda()
+        log()
+        return 1
+    else
+        salvaToken(buffer,"numero binario com erro")
+        anda()
+        log() 
+        return 0
+    end
+end
+
+function estadoHexa()
+    buffer = c
+    anda()
+    while isHexa(c) do
+    end
+end
+
+function estadoNumero()
+    buffer = c
+    anda()
+    while isDec(c) do
+        buffer = buffer .. c
+        anda()
+    end
+    if isPonto(c) then
+        anda()
+        if(isPonto(c)) then
+            salvaToken(buffer,"numero")
+            log()
+            salvaToken("..","ponto ponto")
+            log()
+            anda()
+            return 2
+        end
+        if isDec(c) then
+            volta()
+            buffer = buffer .. c
+            anda()
+            while isDec(c) do
+                buffer = buffer .. c
+                anda()
+            end  
+            if isColado(c) then
+                salvaToken(buffer,"float")
+                log()
+                return 1
+            end
+            salvaToken(buffer,"float com erro")
+            log()
+        end
+    end
+    if isColado(c) then
+        salvaToken(buffer,"numero")
+        log()
+        return 1;
+    end
+    salvaToken(buffer,"numero com erro")
+    log()
+    return 0;
 end
 
 function estadoBColchete()
-  
+    buffer = c
+    anda()
+    salvaToken(buffer,"fecha colchete")
+    log()
 end
 
 function main()

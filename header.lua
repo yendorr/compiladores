@@ -4,23 +4,26 @@ function isAlpha(char)
 end
 
 function isBin(char)
-  asc = string.byte(char)
-  return (asc == 48 or asc == 49)
+  if(char) then
+      asc = string.byte(char)
+      return (asc == 48 or asc == 49)
+  end
+  return false
 end
     
 function isOcta(char)
-  asc = string.byte(char)
-  return (asc >= 48 and asc<=55)
+      asc = string.byte(char)
+      return (asc == 48 or asc == 49 or asc == 50 or asc == 51 or asc == 52 or asc == 53 or asc == 54 or asc==55)
 end
 
-function isDec(char)  
-    asc = string.byte(char)
-    return (asc >= 48 and asc <= 57)
+function isDec(char)
+        asc = string.byte(char)
+        return (asc == 48 or asc == 49 or asc == 50 or asc == 51 or asc == 52 or asc == 53 or asc == 54 or asc == 55 or asc == 56 or  asc == 57)
 end
 
 function isHexa(char)
-    asc = string.byte(char)
-    return (asc >= 48 and asc <= 57) or (asc >= 65 and asc <= 70) or (asc >= 97 and asc <= 102)
+        asc = string.byte(char)
+        return (asc == 48 or asc == 49 or asc == 50 or asc == 51 or asc == 52  or asc == 53 or asc == 54 or asc == 55 or asc == 56 or asc == 57 or asc == 65 or asc == 66 or asc == 67 or asc == 68 or asc == 69 or asc == 70 or asc == 97 or asc == 98 or asc == 99 or asc == 100  or asc == 11 or asc == 102)
 end
 
 function isAritmetico(char)
@@ -132,6 +135,6 @@ function identificador(char)
     return isAlpha(char) or isUnderLine(char) or isDec(char)
 end  
 
-function colado(char)
-  return isAritmetico(char) or isMenos(char) or isMenor(char) or isMaior(char) or isIgual(char) or isPV(char)       or isDP(char) or isVirgula(char) or isAParente(char)
+function isColado(char)
+  return isAritmetico(char) or isMenos(char) or isMenor(char) or isMaior(char) or isIgual(char) or isPV(char) or isDP(char) or isVirgula(char) or isAParente(char)
 end  
