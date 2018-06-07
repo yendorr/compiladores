@@ -1,9 +1,22 @@
-<
-%111010101
-%10101c101
-&123456
-&34567890987654
-12
-12.1
-1..2
+%1010 %1210
+$abaca7e
+$ac1ga1L
+
+654456;
+5478
+45r456
+2.33
+2-1
+< >2<=45>=678<>56==56:= 3457
+program HelloWorld163;
+begin
+  writeln('Hello, world.')
+$f12a
+end.
+a3xbcd := (-x);
+for 1..9
+for 1 .. 9
+x: Integer&
+y: Integer
+break
 <
