@@ -15,9 +15,9 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, tipo())
+    print( TK.texto, filist())
     avanca()
-    print( TK.texto, tipo())
+    print( TK.texto, filist())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -169,17 +169,18 @@ function filist()
     recua() -- gambiarra nojenta para acertar o loop, ou solução brilhante
     repeat
       avanca()
-      print("ue",TK.texto)
       if (TK.texto ~= ";") then
-        print("ue 2",TK.texto)
         recua() -- do while é merda
         repeat
             avanca() 
             if (TK.tipo ~= "identificador") then
-                return false
+                break
             end
             avanca()
         until (TK.texto ~= ",")
+        if (TK.tipo ~= "identificador") then
+                break
+            end
         if (TK.texto == ":")then
             avanca()
             if(not tipo()) then
@@ -188,15 +189,15 @@ function filist()
             avanca()
         end
       end
-      print("ue3",TK.texto)
     until (TK.texto ~= ";")
     
     --trecho 14
     if (TK.texto == "case") then
         
-    else
-        return true -- lambda
     end
+    
+    
+    return true -- lambda
 end
 
 if lexico(false) then

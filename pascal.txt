@@ -1,2 +1,2 @@
-packed record ;
-record a,b : .a
+a,b:int
+a,b:int;a,b:int;;;;
