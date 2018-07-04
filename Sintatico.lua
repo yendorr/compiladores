@@ -395,6 +395,7 @@ function term()
         end
         avanca()
     end
+    recua()
     return true
 end
 
