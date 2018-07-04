@@ -1,2 +1,2 @@
-packed record a,; end
-record ;;;a,b:.a;a,b,c,d:int end
+packed record a:(a,b)  end
+record a,b,c:ba;;;;;d,e,f,g:ca end

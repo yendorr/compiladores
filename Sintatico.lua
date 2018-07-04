@@ -5,13 +5,13 @@ TK = 0
 function avanca()
     contador = contador + 1
     TK = token[contador]
-    print(TK.texto)
+    --print(TK.texto)
 end
 
 function recua()
     contador = contador - 1
     TK = token[contador]
-    print("<-")
+    print(TK.texto)
 end
 
 function main()
@@ -168,33 +168,30 @@ end
 
 function filist()
     --trecho 13
-    bleak = false
-    recua() -- gambiarra nojenta para acertar o loop, ou solução brilhante
-    repeat
+    if (TK.tipo == "identificador") then
         avanca()
-        if (TK.texto ~= ";") then
-            recua() -- do while é merda
-            repeat
-                avanca() 
-                if (TK.tipo ~= "identificador") then
-                    bleak = true
-                    break
-                end
-                avanca()
-            until (TK.texto ~= ",")
-            if (bleak) then
-                break
-            end
-            if (TK.texto == ":")then
-                avanca()
-                print(TK.texto, "é tipo?")
-                if(not tipo()) then
-                    return false
-                end
-                avanca()
-            end
+        if(TK.texto == ",") then
+            avanca()
+            return filist()
         end
-      until (TK.texto ~= ";")
+        if (TK.texto == ":") then
+            avanca()
+            if(tipo()) then
+                avanca()
+            else
+                print("ah meu")
+                return false
+            end
+        else
+            print("poxa", TK.texto)
+            return false
+        end
+    end
+    
+    if (TK.texto == ";") then
+        avanca()
+        return filist()
+    end
     
     --trecho 14
     if (TK.texto == "case") then
@@ -218,17 +215,8 @@ function filist()
 end
 
 function trecho15()
-    bleak = false
-    repeat
-        avanca()
-        if (TK.texto ~=";")then
-            recua()
-            repeat
-                avanca()
-                if (TK.tipo ~= "string" and TK.texto ~="+")then end
-            until true 
-        end
-    until true
+    
+    
 end
 
 if lexico(false) then
