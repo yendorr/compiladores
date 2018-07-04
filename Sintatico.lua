@@ -5,19 +5,21 @@ TK = 0
 function avanca()
     contador = contador + 1
     TK = token[contador]
+    print(TK.texto)
 end
 
 function recua()
     contador = contador - 1
     TK = token[contador]
+    print("<-")
 end
 
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, filist())
+    print( TK.texto, tipo())
     avanca()
-    print( TK.texto, filist())
+    print( TK.texto, tipo())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -166,38 +168,67 @@ end
 
 function filist()
     --trecho 13
+    bleak = false
     recua() -- gambiarra nojenta para acertar o loop, ou solução brilhante
     repeat
-      avanca()
-      if (TK.texto ~= ";") then
-        recua() -- do while é merda
-        repeat
-            avanca() 
-            if (TK.tipo ~= "identificador") then
+        avanca()
+        if (TK.texto ~= ";") then
+            recua() -- do while é merda
+            repeat
+                avanca() 
+                if (TK.tipo ~= "identificador") then
+                    bleak = true
+                    break
+                end
+                avanca()
+            until (TK.texto ~= ",")
+            if (bleak) then
                 break
             end
-            avanca()
-        until (TK.texto ~= ",")
-        if (TK.tipo ~= "identificador") then
-                break
+            if (TK.texto == ":")then
+                avanca()
+                print(TK.texto, "é tipo?")
+                if(not tipo()) then
+                    return false
+                end
+                avanca()
             end
-        if (TK.texto == ":")then
+        end
+      until (TK.texto ~= ";")
+    
+    --trecho 14
+    if (TK.texto == "case") then
+        avanca()
+        if (TK.tipo == "identificador") then
             avanca()
-            if(not tipo()) then
+            if(TK.texto ~= ",") then
                 return false
             end
             avanca()
         end
-      end
-    until (TK.texto ~= ";")
-    
-    --trecho 14
-    if (TK.texto == "case") then
-        
+        if (TK.tipo == "identificador") then --TYIDEN
+            avanca()
+            if (TK.texto == "of") then
+                return trecho15()
+            end
+        end
     end
-    
-    
+    recua()
     return true -- lambda
+end
+
+function trecho15()
+    bleak = false
+    repeat
+        avanca()
+        if (TK.texto ~=";")then
+            recua()
+            repeat
+                avanca()
+                if (TK.tipo ~= "string" and TK.texto ~="+")then end
+            until true 
+        end
+    until true
 end
 
 if lexico(false) then
