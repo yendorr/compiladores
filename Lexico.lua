@@ -9,6 +9,8 @@ contadorTokens = 0
 len=0
 c = nil;
 palavra = nil
+lexdebug = false
+lexicoOk = true
 
 function analisa(palavra)
   len = palavra:len()
@@ -38,15 +40,40 @@ function salvaToken(bufferDoToken, tipoDoToken)
       tipo = tipoDoToken,
       linha = linhaNoCodigo,
       coluna = colunaNoCodigo,
-      contadorErros = 0,
-      erro = {}
+      erro = false
   }
 end
 
+function salvaTokenComErro(bufferDoToken, tipoDoToken, erroDoToken)
+  contadorTokens = contadorTokens + 1
+  token[contadorTokens]={
+      texto = bufferDoToken,
+      tipo = tipoDoToken,
+      linha = linhaNoCodigo,
+      coluna = colunaNoCodigo,
+      erro = erroDoToken
+  }
+end
+
+function verificaErros()
+    local i=1
+    while (i<=contadorTokens)do
+        if token[i].erro then
+            lexicoOk = false
+            logErro(i)
+        end
+        i = i+1
+    end
+end
+
+function logErro(i)
+    print("[ERRO]",token[i].erro,"linha",token[i].linha,"coluna",token[i].coluna)
+end
+
 function log()
-  print("palavra - c",palavra,c)
-  print("pos - len",posW , len)
-  print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,"\n")
+  if(lexdebug) then
+    print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,token[contadorTokens].erro,"\n")
+  end
 end
 
 function round(x)
@@ -218,17 +245,41 @@ end
 function estadoAspa()
   buffer = c
   anda()
-  salvaToken(buffer,"aspa")
-  log()
-  return 1
+  buffer = buffer..c
+  anda()
+  buffer = buffer..c
+  if isAspa(c) then
+      anda()
+      salvaToken(buffer,"caracter")
+      log()
+      return 1
+  else
+      anda()
+      salvaTokenComErro(buffer,"caracter"," ' expected")
+      log()
+  end
 end
 
 function estadoAspas()
   buffer = c
   anda()
-  salvaToken(buffer,"aspas")
-  log()
-  return 1
+  while not isAspas(c) and c~="" do
+      buffer = buffer .. c
+      anda()
+  end
+  if isAspas(c) then 
+      buffer = buffer .. c
+      anda()
+      salvaToken(buffer,"string")
+      log()
+      return 1
+  else
+      anda()
+      salvaTokenComErro(buffer,"string", " '' expected")
+      log()
+      return 0
+  end
+
 end
 
 function estadoAChave()
@@ -270,7 +321,11 @@ function estadoPonto()
     salvaToken(buffer,"ponto ponto")
     anda()
     log()
+    return 1
   end
+  salvaToken(".","ponto")
+  log()
+  return 1
 end
 
 function estadoBColchete()
@@ -307,7 +362,7 @@ function estadoBinario()
     return 1;
   end
   if(c ~= "") then
-    salvaToken(buffer, "numero binario com erro")
+    salvaTokenComErro(buffer, "numero binario", "não há somente binarios")
     anda()
     log()
     return 0;
@@ -327,7 +382,7 @@ function estadoOcta()
     anda()
   end
   if(c ~= "") then
-    salvaToken(buffer, "numero octa com erro")
+    salvaTokenComErro(buffer, "numero octa","não há somente numeros octa")
     anda()
     log()
     return 1
@@ -347,7 +402,7 @@ function estadoHexa()
     anda()
   end
   if(c ~= "") then
-    salvaToken(buffer,"numero hexa com erro")
+    salvaTokenComErro(buffer,"numero hexa", "não há somente numeros hexa")
     anda()
     log()
     return 1
@@ -390,7 +445,7 @@ function estadoNumero()
         return 1
       end
       if(c ~= "") then
-        salvaToken(buffer,"float com erro")
+        salvaTokenComErro(buffer,"float","não há somente numeros")
         anda()
         log()
         return 1
@@ -409,7 +464,7 @@ function estadoNumero()
   end
 
   if (c ~= "") then
-    salvaToken(buffer,"numero com erro")
+    salvaTokenComErro(buffer,"numero", "não há somente numeros")
     anda()
     log()
     return 0;
@@ -430,31 +485,32 @@ function estadoIdentificador()
     anda()
   end
   if isColado(c) then
-    if buscaBinaria(buffer,1,table.getn(tabelaPalavras)) then
-        salvaToken(buffer,buffer) 
-    else
-        salvaToken(buffer,"identificador") 
-    end
-    log()
-    return 1
+      if buscaBinaria(buffer:lower(),1,table.getn(tabelaPalavras)) then
+          salvaToken(buffer:lower(),"reservada") 
+      else
+          salvaToken(buffer,"identificador") 
+      end
+      log()
+      return 1
   end
   if(c ~= "") then
-    salvaToken(buffer,"identificador com erro")
-    anda()
-    log()
-    return 0
+      salvaTokenComErro(buffer,"identificador", "simbolo não identificado")
+      anda()
+      log()
+      return 0
   end
     
-    if buscaBinaria(buffer,1,table.getn(tabelaPalavras)) then
-        salvaToken(buffer,buffer) 
-    else
+  if buscaBinaria(buffer:lower(),1,table.getn(tabelaPalavras)) then
+        salvaToken(buffer:lower(),"reservada")
+  else
         salvaToken(buffer,"identificador") 
-    end
-    log()
-    return 1
+  end
+  log()
+  return 1
 end
 
-function main()
+function lexico(a)
+  lexdebug = a
   leArquivo()
   for line in io.lines(file) do
     linhaNoCodigo = linhaNoCodigo + 1
@@ -464,6 +520,8 @@ function main()
       analisa (palavra)
     end
   end
+  verificaErros()
+  return lexicoOk;
 end
 
 function leArquivo()
@@ -475,5 +533,3 @@ function leArquivo()
 end
 
 table.sort(tabelaPalavras, function(a,b) return a<b end)
-
-main()
