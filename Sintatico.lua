@@ -16,9 +16,9 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, infipo())
+    print( TK.texto, term())
     avanca()
-    print( TK.texto, infipo())
+    print( TK.texto, term())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -58,9 +58,7 @@ function sitype()
         avanca()
         if (TK.texto == "..") then
             avanca()
-            if (const()) then
-                return true
-            end
+            return const()
         end
     end
     
@@ -70,6 +68,7 @@ end
 function const()
     -- trecho 1
     if (TK.tipo == "string") then
+        avanca()
         return true
     end
     
@@ -190,6 +189,8 @@ function filist()
         return filist()
     end
     
+    
+    
     --trecho 14
     if (TK.texto == "case") then
         avanca()
@@ -295,28 +296,128 @@ function infipo()
         avanca()
         return infipo()
     end
-    recua()
+    return true
+end
+
+function factor()
+  --trecho 
+    if (TK.tipo == "identificador")then --COIDEN
+        return true
+    end
+    
+    if (TK.tipo == "numero" ) then
+        return true
+    end
+    
+    if (TK.texto == "nil") then
+        return true
+    end
+    
+    if (TK.tipo == "string") then
+        return true
+    end
+    
+    if (TK.tipo == "identificador") then --VAIDEN
+        return infipo()
+    end
+    
+    --trecho 20
+    if (TK.tipo == "identificador") then --FUIDEN
+        if(TK.texto == "(") then
+            repeat
+                avanca()
+                if(not expr())then
+                    return false
+                end
+                avanca()
+            until (TK.texto ~= ",")
+            return(TK.texto == ")")
+        end
+        
+        recua()
+        return true -- lambda
+    end
+    
+    --trecho 21
+    if (TK.texto == "(")then
+        avanca()
+        if(not expr()) then
+            return false
+        end
+        avanca()
+        return (TK.texto == ")")
+    end
+    
+    if (TK.texto == "not") then
+        avanca()
+        return factor()
+    end
+    
+    if (TK.texto == "[") then
+        avanca()
+        if(TK.texto == "]") then
+            return true
+        end
+        return trecho22()
+    end
+  
+    
+    return false
+end
+
+function trecho22()
+    if (expr()) then
+        avanca()
+        if(TK.texto == "..") then
+            avanca()
+            if(not expr()) then
+                return false
+            end
+            avanca()
+            if(TK.texto == ",")then
+                avanca()
+                return trecho22()
+            end
+            return (TK.texto == "]")
+        end
+    end
+end
+
+function term()
+    if(not factor()) then
+        return false
+    end
+    avanca()
+    while(TK.texto == "*" or TK.texto == "/" or TK.texto == "div" or TK.texto == "mod" or TK.texto == "and") do
+        avanca()
+        if(not factor()) then
+            return false
+        end
+        avanca()
+    end
     return true
 end
 
 function expr()
-    --trecho 19
+    --trecho 
     if (not siexpr()) then
         return false
     end
     avanca()
     if(TK.tipo == "operador") then
-      return siexpr()
+        avanca()
+        return siexpr()
     end
     
-    recua()
     return true
 end
 
+
+
 function siexpr()
-  return true
+    
 end
 
-if lexico(false) then
+if lexico(true) then
     main()
 end
