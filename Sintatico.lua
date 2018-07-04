@@ -16,9 +16,9 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, siexpr())
+    print( TK.texto, expr())
     avanca()
-    print( TK.texto, siexpr())
+    print( TK.texto, expr())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -423,7 +423,7 @@ function siexpr()
 end
 
 function expr()
-    --trecho 
+    --trecho 25
     if (not siexpr()) then
         return false
     end
