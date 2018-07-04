@@ -16,9 +16,9 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, term())
+    print( TK.texto, siexpr())
     avanca()
-    print( TK.texto, term())
+    print( TK.texto, siexpr())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -381,9 +381,11 @@ function trecho22()
             return (TK.texto == "]")
         end
     end
+    return false
 end
 
 function term()
+    --trecho 23
     if(not factor()) then
         return false
     end
@@ -399,6 +401,27 @@ function term()
     return true
 end
 
+function siexpr()
+    --trecho 24
+    if(TK.texto == "+" or TK.texto == "-") then
+        avanca()
+    end
+    if(not term())then
+        return false
+    end
+    avanca()
+    while (TK.texto == "+" or TK.texto == "-" or  TK.texto == "or") do
+        avanca()
+        if(not term())then
+            return false
+        end
+        avanca()
+    end
+    
+    recua()
+    return true
+end
+
 function expr()
     --trecho 
     if (not siexpr()) then
@@ -409,15 +432,10 @@ function expr()
         avanca()
         return siexpr()
     end
-    
+    recua()
     return true
 end
 
-
-
-function siexpr()
-    
-end
 
 if lexico(true) then
     main()
