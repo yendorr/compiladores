@@ -152,19 +152,19 @@ function estadoMenor()
   anda()
   if isMaior(c) then 
     buffer = buffer .. c
-    salvaToken(buffer,"diferente")
+    salvaToken(buffer,"operador")
     log()
     anda()
     return 1
 
   elseif isIgual(c) then --and i<=len then
     buffer = buffer .. c
-    salvaToken(buffer,"menorIgual")
+    salvaToken(buffer,"operador")
     log()
     anda()
     return 1
   else
-    salvaToken(buffer,"menor")
+    salvaToken(buffer,"operador")
     log()
     return 1
   end
@@ -176,12 +176,12 @@ function estadoMaior()
 
   if isIgual(c) then
     bueffer = buffer .. c
-    salvaToken(buffer,"maiorIgual")
+    salvaToken(buffer,"operador")
     log()
     anda()
     return 1
   else    
-    salvaToken(buffer,"maior")
+    salvaToken(buffer,"operador")
     log()
     return 1;
   end
@@ -192,7 +192,7 @@ function estadoIgual()
   anda()
   if(isIgual(c)) then
     buffer = buffer .. c
-    salvaToken(buffer,"igual")
+    salvaToken(buffer,"operador")
     log()
     anda()
     return 1
@@ -229,7 +229,7 @@ end
 function estadoMenos()
   buffer = c
   anda()
-  salvaToken(buffer,"menos")
+  salvaToken(buffer,"aritmetico")
   log()
   return 1
 end

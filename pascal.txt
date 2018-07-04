@@ -1,2 +1,1 @@
-packed record a:(a,b)  end
-record a,b,c:ba;;;;;d,e,f,g:ca end
+[a,b,c,d,e].3[b,c] end

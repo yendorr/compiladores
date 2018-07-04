@@ -11,15 +11,14 @@ end
 function recua()
     contador = contador - 1
     TK = token[contador]
-    print(TK.texto)
 end
 
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, tipo())
+    print( TK.texto, infipo())
     avanca()
-    print( TK.texto, tipo())
+    print( TK.texto, infipo())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -88,7 +87,7 @@ end
 
 function tipo() -- type é uma palavra reservada do lua, logo type sera tipo
     -- trecho 6
-    if (TK.texto==".")then
+    if (TK.texto=="=")then--|
         avanca()
         
         if (TK.tipo == "identificador") then --TYIDEN
@@ -179,11 +178,9 @@ function filist()
             if(tipo()) then
                 avanca()
             else
-                print("ah meu")
                 return false
             end
         else
-            print("poxa", TK.texto)
             return false
         end
     end
@@ -206,6 +203,7 @@ function filist()
         if (TK.tipo == "identificador") then --TYIDEN
             avanca()
             if (TK.texto == "of") then
+                avanca()
                 return trecho15()
             end
         end
@@ -215,8 +213,108 @@ function filist()
 end
 
 function trecho15()
+    if (TK.tipo == "string") then
+        avanca()
+        return trecho16()
+    else
+        if(TK.texto == "+" or TK.texto == "-") then
+            avanca()
+            if (TK.tipo ~= "identificador" and TK.tipo ~= "numero") then -- COIDEN
+                return false
+            end 
+        end
+        if(TK.tipo == "identificador" or TK.tipo == "numero")then --COIDEN
+            avanca()
+            return trecho16()
+        end
+    end
+    if(TK.texto == ";") then
+        return trecho15()
+    end
     
+    recua() 
+    return true -- lambada
+end
+
+function trecho16()
+    if (TK.texto == ",")then
+        return trecho15()
+    end
+    if (TK.texto ~= ":")then
+        return false
+    end
+    avanca()
+    if (TK.texto ~= "(")then
+        return false
+    end
+    avanca()
+    if(not filist()) then
+        return false
+    end
+    avanca()
+    if (TK.texto ~= ")")then
+        return false
+    end
+    avanca()
+    if(TK.texto == ";")then
+        return trecho15()
+    end
     
+    recua()
+    return true
+end
+
+function infipo()
+    --trecho 17
+    if(TK.texto == "[")then
+        repeat
+            avanca()
+            if(not expr()) then
+              return false
+            end
+            avanca()
+        until TK.texto ~= ","
+        if(TK.texto ~= "]")then
+            return false
+        end
+        avanca()
+        return infipo()
+    end
+    
+    --trecho 18
+    if (TK.texto == ".")then
+        avanca()
+        if(TK.tipo ~="identificador")then -- FIIDEN
+            return false
+        end
+        avanca()
+        return infipo()
+    end
+    
+    if (TK.texto == "=")then -- |
+        avanca()
+        return infipo()
+    end
+    recua()
+    return true
+end
+
+function expr()
+    --trecho 19
+    if (not siexpr()) then
+        return false
+    end
+    avanca()
+    if(TK.tipo == "operador") then
+      return siexpr()
+    end
+    
+    recua()
+    return true
+end
+
+function siexpr()
+  return true
 end
 
 if lexico(false) then
