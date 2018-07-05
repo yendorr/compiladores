@@ -5,7 +5,9 @@ colunaNoCodigo = 0
 posW = 0
 buffer = nil
 token={}
+identificador={}
 contadorTokens = 0
+contadorIdentificadores = 0
 len=0
 c = nil;
 palavra = nil
@@ -42,6 +44,58 @@ function salvaToken(bufferDoToken, tipoDoToken)
       coluna = colunaNoCodigo,
       erro = false
   }
+  if tipoDoToken == "identificador" then
+      salvaIdentificador(bufferDoToken)
+  end
+end
+
+function salvaIdentificador(bufferDoToken)
+    if(esta(bufferDoToken)) then return false end
+    contadorIdentificadores = contadorIdentificadores + 1
+    identificador[contadorIdentificadores]={
+          texto = bufferDoToken,
+          tipo = nil
+      }
+      ordena()
+end
+
+function ordena()
+    local ok = false
+    local i
+    while not ok do
+        i = 1
+        ok = true
+        while i<contadorIdentificadores do
+            if identificador[i].texto > identificador[i+1].texto then
+                aux1 = identificador[i].texto
+                aux2 = identificador[i+1].texto
+                identificador[i+1].texto =  aux1
+                identificador[i].texto =    aux2
+                ok = false
+            end
+            i = i+1
+        end
+    end
+end
+
+function esta(texto)
+    return buscaIdentificador(texto,1,contadorIdentificadores)
+end
+
+function buscaIdentificador(buffer,i,j)
+    m = math.floor( (i+j)/2)
+    if m == 0 then return false end
+    if buffer == identificador[contadorIdentificadores].texto then
+        return m 
+    end
+    if i>=j then
+        return false
+    end
+    if buffer < identificador[contadorIdentificadores].texto then
+        return buscaBinaria(buffer,i,m-1)
+    else
+        return buscaBinaria(buffer,m+1,j)
+    end
 end
 
 function salvaTokenComErro(bufferDoToken, tipoDoToken, erroDoToken)
@@ -71,9 +125,18 @@ function logErro(i)
 end
 
 function log()
-  if(lexdebug) then
-    print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,token[contadorTokens].erro,"\n")
-  end
+    if(lexdebug) then
+      print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,token[contadorTokens].erro,"\n")
+    end
+end
+
+function logId()
+    local i = 1
+    print ("------------------------ID------------------")
+    while i<=contadorIdentificadores do
+        print(identificador[i].texto)
+        i = i+1
+    end 
 end
 
 function round(x)
@@ -84,7 +147,7 @@ function round(x)
 end
 
 function buscaBinaria(buffer,i,j)
-    m = math.floor( (i+j)/2) 
+    m = math.floor( (i+j)/2)+1
     if buffer == tabelaPalavras[m] then
         return true
     end
@@ -99,7 +162,8 @@ function buscaBinaria(buffer,i,j)
     
 end
 
-function estadoInicial()    
+function estadoInicial()
+  print(".",c)
   if isMaior(c) then
     estadoMaior()
   elseif isMenor(c) then
@@ -488,7 +552,7 @@ function estadoIdentificador()
       if buscaBinaria(buffer:lower(),1,table.getn(tabelaPalavras)) then
           salvaToken(buffer:lower(),"reservada") 
       else
-          salvaToken(buffer,"identificador") 
+          salvaToken(buffer,"identificador")
       end
       log()
       return 1
@@ -521,6 +585,7 @@ function lexico(a)
     end
   end
   verificaErros()
+  if a then logId() end
   return lexicoOk;
 end
 

@@ -13,6 +13,24 @@ function recua()
     TK = token[contador]
 end
 
+function determina(buffer,i,j,torp)
+    m = math.floor( (i+j)/2)
+    if m == 0 then return false end
+    if buffer == identificador[contadorIdentificadores].texto then
+        return m 
+    end
+    if i>=j then
+        return false
+    end
+    if buffer < identificador[contadorIdentificadores].texto then
+        return buscaBinaria(buffer,i,m-1,torp)
+    else
+        return buscaBinaria(buffer,m+1,j,torp)
+    end
+end
+
+
+
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
@@ -436,6 +454,80 @@ function expr()
     return true
 end
 
+function block()
+    --trecho 26
+    if(TK.texto == "label")then
+          repeat
+              avanca()
+              if(TK.tipo ~= "numero")then
+                  return false
+              end
+              avanca()
+          until TK.texto ~= ","
+          if (TK.texto ~= ";")then
+              return false
+          end
+          avanca()
+    end
+    
+    --trecho 27
+    if(const())then
+        avanca()
+        if (TK.tipo ~= "identificador") then
+            return false
+        end
+        repeat 
+            determina(TK.texto, "COIDEN" )
+            avanca()
+            if(TK.texto ~= "=") then
+                return false
+            end
+            avanca()
+            if(not const()) then
+                return false
+            end
+            avanca()
+            if(TK.texto ~= ";")then
+                return false
+            end
+            avanca()
+        until TK.type ~= "identificador"
+    end
+    
+    --trecho 28
+    if(TK.texto == "type") then
+        avanca()
+        if(TK.tipo~= "identificador" )then
+            return false
+        end
+        repeat
+            determina(TK.texto,"TYIDEN")
+            if (TK.texto ~= "=")then
+                return false
+            end
+            avanca()
+            if (not tipo())end
+                return false
+            end    
+            avanca()
+            if (TK.texto ~= ";")then
+                return false
+            end
+            avanca()
+        until (TK.tipo ~= "identificador")
+    end
+    
+    --trecho 29
+    if(TK.texto == "var")
+        avanca()
+        if(TK.tipo ~= "identificador") then
+            return false
+        end
+        avanca()
+        
+        
+    end
+end
 
 if lexico(true) then
     main()

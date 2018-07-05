@@ -30,7 +30,7 @@ end
 
 function isAritmetico(char)
     asc = string.byte(char)
-    return asc == 42 or asc == 43 or asc == 47
+    return asc == 42 or asc == 43 or asc == 47 or asc == 45 
 end
 
 function isMenos(char)
