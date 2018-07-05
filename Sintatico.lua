@@ -729,11 +729,11 @@ function statm()
       --trecho 37
       elseif (TK.tipo == "identificador") then -- PRIDEN
       avanca()
-      if(TK.texto = "(")then
+      if(TK.texto == "(")then
           repeat
           avanca()
           if (TK.tipo ~= "identificador")then --PRIDEN
-              if (and not expr()) then
+              if (not expr()) then
                   return false
               end
           end
@@ -749,7 +749,7 @@ function statm()
       elseif (TK.texto == "begin") then
           repeat
               avanca()
-              if(no statm())then
+              if(not statm())then
                   return false
               end
               avanca()
@@ -791,24 +791,152 @@ function statm()
           if (TK.texto ~= " of" )then 
               return false
           end
-      elseif () then
-      elseif () then
-      elseif () then
-      elseif () then
-      elseif () then
+          repeat
+          repeat
+              avanca()
+              if(TK.tipo == "string" or TK.tipo == "identificador" or TK.tipo == "numero")then -- COIDEN
+                  avanca()
+              elseif (TK.texto == "+" or TK.texto == "-") then
+                  avanca()
+                  if(TK.tipo == "identificador" or TK.tipo == "numero") then
+                      avanca()
+                  end
+                    
+              elseif(TK.tipo == "identificador" or TK.tipo == "numero") then
+                    avanca()
+              else
+              end
+          until TK.texto == ","
+          
+          if(TK.texto ~= ":")then
+              return false
+          end
+          avanca()
+          if(not statm())then
+              return false
+          end
+          until TK.texto ~= ";"
+          return TK.texto == "end"
+          
+        
+      elseif (TK.texto == "repeat") then
+          repeat
+              avanca()
+              if not statm() then
+                  return false
+              end
+              avanca()
+          until TK.texto ~= ";"
+          if(TK.texto ~= "until") then
+              return false
+          end
+          return statm()
+          
+      elseif (TK.texto == "while") then
+          avanca()
+          if (not statm()) then
+              return false
+          end
+          avanca()
+          if (TK.texto ~= "do")then
+              return false
+          end
+          avanca()
+          return statm()
+          
+      elseif (TK.texto == "for") then
+          avanca()
+          if (TK.tipo ~= "identificador") then --VAIDEN
+              return false
+          end  
+          avanca()
+          if (not infipo()) then
+              return false
+          end
+          avanca()
+          if (TK.texto ~= ":=")then
+              return false
+          end
+          avanca()
+          if (not expr())then
+              return false
+          end
+          
+          avanca()
+          if (TK.texto ~= "to" and TK.texto ~= "downto")then
+              return false
+          end
+          avanca()
+          if (not expr())then
+              return false
+          end
+          avanca()
+          if (TK.texto ~= "do")then
+              return false
+          end
+          avanca()
+          return statm()
+          
+      elseif (TK.texto == "with") then
+          repeat 
+              avanca()
+              if (TK.texto ~= "identificador")then --VAIDEN
+                  return false
+              end
+              avanca()
+              if (not infipo())then
+                  return false
+              end
+              avanca()
+          until TK.texto ~= ","
+          
+          if (TK.texto ~= "do")then
+              return statm()
+          end
+          
+      elseif (TK.texto == "goto") then
+          return TK.tipo == "numero"
       end
+      
+      recua()
+      return true
 end
 
+function progrm()
+    if (TK.texto ~= "prog")then
+        return false
+    end
+    avanca()
+    if (TK.tipo ~= "identificador")then
+        return false
+    end
+    avanca()
+    if (TK.texto ~= "(")then
+        return false
+    end
+    repeat
+    avanca()
+    if (TK.tipo ~= "identificador")then
+        return false
+    end
+    avanca()
+    until TK.texto ~= ","
+    
+    if (TK.texto ~= ")")then
+        return false
+    end
+    avanca()
+    if (TK.texto ~= ";")then
+        return false
+    end
+    avanca()
+    if (not block())then
+        return false
+    end
+    avanca()
+    return TK.texto == "."
+end
 
 if lexico(true) then
     main()
-    logId()
 end
-
-
-
-
-
-
-
-
