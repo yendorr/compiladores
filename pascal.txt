@@ -1,4 +1,11 @@
-(23)*4+2-(33)<ab*2*(3+b)
-a<>b
+const abelha = "abelha"
+var x: integer;
 
-end
+begin
+    x := 0;
+    while x < 10 do
+    begin
+        writeln(x);
+        x := x + 1;
+    end;
+end.

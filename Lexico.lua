@@ -85,13 +85,13 @@ end
 function buscaIdentificador(buffer,i,j)
     m = math.floor( (i+j)/2)
     if m == 0 then return false end
-    if buffer == identificador[contadorIdentificadores].texto then
+    if buffer == identificador[m].texto then
         return m 
     end
     if i>=j then
         return false
     end
-    if buffer < identificador[contadorIdentificadores].texto then
+    if buffer < identificador[m].texto then
         return buscaBinaria(buffer,i,m-1)
     else
         return buscaBinaria(buffer,m+1,j)
@@ -126,7 +126,7 @@ end
 
 function log()
     if(lexdebug) then
-      print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,token[contadorTokens].erro,"\n")
+      print(contadorTokens,token[contadorTokens].texto,token[contadorTokens].tipo,token[contadorTokens].erro)
     end
 end
 
@@ -134,7 +134,7 @@ function logId()
     local i = 1
     print ("------------------------ID------------------")
     while i<=contadorIdentificadores do
-        print(identificador[i].texto)
+        print(identificador[i].texto,identificador[i].tipo)
         i = i+1
     end 
 end
@@ -163,7 +163,6 @@ function buscaBinaria(buffer,i,j)
 end
 
 function estadoInicial()
-  print(".",c)
   if isMaior(c) then
     estadoMaior()
   elseif isMenor(c) then

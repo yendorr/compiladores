@@ -13,16 +13,20 @@ function recua()
     TK = token[contador]
 end
 
-function determina(buffer,i,j,torp)
+function determina(buffer,torp)
+    return determina2(buffer,1,contadorIdentificadores)
+end
+function determina2(buffer,i,j,torp)
     m = math.floor( (i+j)/2)
     if m == 0 then return false end
-    if buffer == identificador[contadorIdentificadores].texto then
+    if buffer == identificador[m].texto then
+        identificador[contadorIdentificadores].tipo = torp
         return m 
     end
     if i>=j then
         return false
     end
-    if buffer < identificador[contadorIdentificadores].texto then
+    if buffer < identificador[m].texto then
         return buscaBinaria(buffer,i,m-1,torp)
     else
         return buscaBinaria(buffer,m+1,j,torp)
@@ -34,9 +38,9 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, expr())
+    print( TK.texto, block())
     avanca()
-    print( TK.texto, expr())
+    print( TK.texto, block())
     --[[avanca()
     print( TK.texto, tipo())
     avanca()
@@ -506,7 +510,7 @@ function block()
                 return false
             end
             avanca()
-            if (not tipo())end
+            if (not tipo())then
                 return false
             end    
             avanca()
@@ -518,17 +522,192 @@ function block()
     end
     
     --trecho 29
-    if(TK.texto == "var")
+    if(TK.texto == "var")then
         avanca()
         if(TK.tipo ~= "identificador") then
             return false
         end
+        determina(TK.texto,"VAIDEN")
+        avanca()
+        return trecho30()
+    end
+    return trecho31()
+end
+
+function trecho30()
+    if(TK.texto == ",")then
+        avanca()
+        if(TK.tipo~="identificador") then
+            return false
+        end
+        determina(TK.texto,"VAIDEN")
+        avanca()
+        return trecho30()
+    end
+      
+    if(TK.texto == ":") then
         avanca()
         
-        
+        if (not tipo())then
+            return false
+        end
+        avanca()
+        if (TK.text ~= ";")then
+            return false
+        end
+        avanca()
+        if(TK.tipo == "identificador") then
+            determina(TK.texto,"VAIDEN")
+            avanca()
+            return trecho30()
+        end
+        return trecho31()
     end
 end
 
+function trecho31()
+    if(TK.texto == "proc")then
+        avanca()
+        if(TK.tipo ~="identificador")then
+            return false
+        end
+        determina(TK.texto,"PRIDEN")
+        avanca()
+        if(not palist())then
+            return false
+        end
+        avanca()
+        if(TK.texto ~=";")then
+            return false  
+        end
+        avanca()
+        if(not block())then
+            return false  
+        end
+        avanca()
+        if(TK.texto == ";")then
+            avanca()
+            return trecho31()
+        end
+        return false
+    end
+    
+    if(TK.texto == "func")then
+        avanca()
+        if(TK.tipo ~= "identificador")then
+            return false  
+        end
+        determina(TK.texto,"FUIDEN")
+        avanca()
+        if(not palist)then
+            return false  
+        end
+        avanca()
+        if(TK.texto ~= ":")then
+            return false  
+        end
+        avanca()
+        if(TK.tipo ~="identificador")then --TYIDEN
+            return false  
+        end
+        avanca()
+        if(TK.texto ~=";")then
+            return false  
+        end
+        avanca()
+        if(not block())then
+            return false  
+        end
+        avanca()
+        if(TK.tipo ~= ";")then
+            return false  
+        end
+        avanca()
+        return trecho31()
+    end
+    
+    if(TK.text == "begin")then
+        repeat
+            avanca()
+            if(not statm())then
+                return false  
+            end
+            avanca()
+        until (TK.texto ~= ";")
+        return TK.texto == "end"
+    end
+    return false
+end
+
+function palist() 
+    --trecho 32
+    if(TK.texto == "(") then
+        avanca()
+        return trecho33()
+    end
+  
+    return true
+end
+
+function trecho33()
+    if(TK.texto == "proc")then
+        repeat
+            avanca()
+            if(TK.tipo ~= "identificador" )then
+                return false
+            end
+            avanca()
+        until  TK.tipo ~= ","
+        if (TK.texto == ";")then
+            avanca()
+            return trecho33()
+        end
+            return TK.texto == ")"
+        
+    end
+    
+    if(TK.texto == "func" or TK.texto == "var")then
+        avanca()
+    end  
+    if(TK.tipo ~= "identificador")then
+        return false
+    end
+    avanca()
+    while(Tk.texto==".")do
+        avanca()
+        if(TK.tipo ~= tipo) then
+            return false
+        end
+        avanca()
+    end
+    if(TK.texto ~= ":") then
+        return false
+    end
+    if(TK.tipo ~= "identificador")then --TYIDEN
+        return false
+    end
+    
+    if (TK.texto == ";")then
+        avanca()
+        return trecho33()
+    end
+    return TK.texto == ")"
+end
+
+function statm()
+    
+end
+
+
 if lexico(true) then
     main()
+    logId()
 end
+
+
+
+
+
+
+
+
