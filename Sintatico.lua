@@ -39,7 +39,7 @@ function main()
     print("--------------------------------------SS-------------------")
     avanca()
     print( "execução completa:", progrm())
-    print(TK.texto , contadorIdentificadores)
+    print(TK.texto , token[contador].linha,token[contador].coluna)
     
 end
 
@@ -102,7 +102,7 @@ end
 
 function tipo() -- type é uma palavra reservada do lua, logo type sera tipo
     -- trecho 6
-    if(TK.tipo == "reservada")then return true end
+    if(TK.tipo == "reservada" and TK.texto ~= "array")then return true end
     if (TK.texto=="=")then--|
         avanca()
         
@@ -408,6 +408,9 @@ function term()
         return false
     end
     avanca()
+    if(TK.texto ~= "*" and TK.texto ~= "/" and TK.texto ~= "div" and TK.texto ~= "mod" and TK.texto == "and") then
+      return true
+    end
     while(TK.texto == "*" or TK.texto == "/" or TK.texto == "div" or TK.texto == "mod" or TK.texto == "and") do
         avanca()
         if(not factor()) then
@@ -428,6 +431,9 @@ function siexpr()
         return false
     end
     avanca()
+    if(TK.texto ~= "+" and TK.texto ~= "-" and  TK.texto == "or")then
+      return true
+    end
     while (TK.texto == "+" or TK.texto == "-" or  TK.texto == "or") do
         avanca()
         if(not term())then
@@ -442,6 +448,7 @@ end
 
 function expr()
     --trecho 25
+    print("")
     if (not siexpr()) then
         return false
     end
@@ -826,7 +833,8 @@ function statm()
           if(TK.texto ~= "until") then
               return false
           end
-          return statm()
+          avanca()
+          return expr()
           
       elseif (TK.texto == "while") then
           avanca()
