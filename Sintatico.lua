@@ -38,14 +38,8 @@ end
 function main()
     print("--------------------------------------SS-------------------")
     avanca()
-    print( TK.texto, block())
-    avanca()
-    print( TK.texto, block())
-    --[[avanca()
-    print( TK.texto, tipo())
-    avanca()
-    print( TK.texto, tipo())]]
-    
+    print( "execução completa:", progrm())
+    print(TK.texto , contadorIdentificadores)
     
 end
 
@@ -108,6 +102,7 @@ end
 
 function tipo() -- type é uma palavra reservada do lua, logo type sera tipo
     -- trecho 6
+    if(TK.tipo == "reservada")then return true end
     if (TK.texto=="=")then--|
         avanca()
         
@@ -318,6 +313,7 @@ function infipo()
         avanca()
         return infipo()
     end
+    recua()
     return true
 end
 
@@ -552,7 +548,7 @@ function trecho30()
             return false
         end
         avanca()
-        if (TK.text ~= ";")then
+        if (TK.texto ~= ";")then
             return false
         end
         avanca()
@@ -626,7 +622,7 @@ function trecho31()
         return trecho31()
     end
     
-    if(TK.text == "begin")then
+    if(TK.texto == "begin")then
         repeat
             avanca()
             if(not statm())then
@@ -834,7 +830,7 @@ function statm()
           
       elseif (TK.texto == "while") then
           avanca()
-          if (not statm()) then
+          if (not expr()) then
               return false
           end
           avanca()
@@ -903,7 +899,7 @@ function statm()
 end
 
 function progrm()
-    if (TK.texto ~= "prog")then
+    if (TK.texto ~= "program")then
         return false
     end
     avanca()
