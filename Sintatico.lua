@@ -695,7 +695,108 @@ function trecho33()
 end
 
 function statm()
-    
+      --trecho 34
+      if(TK.tipo == "numero")then
+          avanca()
+          if(TK.texto ~= ":")then
+              return false
+          end
+          avanca()
+      end
+      
+      --trecho 35
+      if (TK.tipo == "identificador") then --VAIDEN
+          avanca()
+          if (not infipo()) then
+              return false
+          end
+          avanca()
+          if(TK.texto ~= ":=") then
+              return false
+          end
+          avanca()
+          return expr()
+      
+      --trecho 36
+      elseif (TK.tipo == "identificador") then -- FUIDEN
+          avanca()
+          if(TK.texto ~= ":=") then
+              return false
+          end
+          avanca()
+          return expr()
+          
+      --trecho 37
+      elseif (TK.tipo == "identificador") then -- PRIDEN
+      avanca()
+      if(TK.texto = "(")then
+          repeat
+          avanca()
+          if (TK.tipo ~= "identificador")then --PRIDEN
+              if (and not expr()) then
+                  return false
+              end
+          end
+          avanca()
+          until TK.texto ~= ","
+          return TK.texto == ")"
+       end
+      
+      recua()
+      return true
+      
+      --trecho 38
+      elseif (TK.texto == "begin") then
+          repeat
+              avanca()
+              if(no statm())then
+                  return false
+              end
+              avanca()
+          until TK.texto ~= ";"
+          return TK.texto == "end"
+      
+      --trecho 39
+      elseif (TK.texto == "if") then
+          avanca()
+          if (not expr() )then 
+              return false
+          end
+          avanca()
+          if (TK.texto ~= "then")then 
+              return false
+          end
+          avanca()
+          if (not statm())then 
+              return false
+          end
+          avanca()
+          if (TK.tipo == "else")then 
+              avanca()
+              if (not statm())then 
+                  return false
+              end
+              avanca()
+          end
+          recua()
+          return true
+          
+      --trecho 40
+      elseif (TK.texto == "case") then
+          avanca()
+          if (not expr())then 
+              return false
+          end
+          avanca()
+          if (TK.texto ~= " of" )then 
+              return false
+          end
+      elseif () then
+      elseif () then
+      elseif () then
+      elseif () then
+      elseif () then
+      end
 end
 
 
